@@ -1,0 +1,18 @@
+{{#*inline "title"}} Software Engineer{{/inline}}
+
+{{#*inline "page"}}
+<h1 class="title">Bill Liu</h1>
+<h2 class="subtitle">Software Engineer</h2>
+<nav class="main-nav">
+    <ul>
+        <li>Resume
+        <li>Contact
+        <li>LinkedIn
+        <li>Github
+</nav>
+<section class="blog-snippet">
+    <header>Latest Blog Posts</header>
+</section>
+{{/inline}}
+
+{{~> base}}
