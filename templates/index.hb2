@@ -12,6 +12,16 @@
 </nav>
 <section class="blog-snippet">
     <header>Latest Blog Posts</header>
+
+    {{#each blog_summaries}}
+        <a href="{{href}}" class="blog-post">
+            <h3>{{title}}</h3>
+            <time>{{date_rendered}}</time>
+            <p>
+                {{descr}}
+            </p>
+        </a>
+    {{/each}}
 </section>
 {{/inline}}
 

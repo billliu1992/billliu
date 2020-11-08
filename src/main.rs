@@ -1,6 +1,7 @@
 use comrak;
 use handlebars::Handlebars;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use std::cmp;
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::fmt;
@@ -36,26 +37,65 @@ struct Blog {
 struct BlogMetadata {
     title: String,
     descr: String,
-    url: String,
+    url_friendly_name: String,
     date: Datetime,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct BlogSummaryRenderData {
+    title: String,
+    descr: String,
+    date_rendered: String,
+    href: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct IndexTemplateRenderData {
+    blog_summaries: Vec<BlogSummaryRenderData>,
+}
+
 fn main() {
+    fs::create_dir_all("output/blogs").unwrap();
+
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
     read_templates(&mut handlebars).unwrap();
 
     let blogs = read_blogs().unwrap();
 
-    let data: BTreeMap<String, String> = BTreeMap::new();
-    println!("{}", handlebars.render("index", &data).unwrap());
+    let mut blog_summaries: Vec<BlogSummaryRenderData> = Vec::new();
+    for blog in &blogs[0..=cmp::min(4, blog_summaries.len())] {
+        blog_summaries.push(BlogSummaryRenderData {
+            title: blog.metadata.title.clone(),
+            descr: blog.metadata.descr.clone(),
+            date_rendered: blog.metadata.date.to_string(),
+            href: format!("/blogs/{}", blog.metadata.url_friendly_name),
+        });
+    }
+
+    fs::write(
+        "output/index.html",
+        handlebars
+            .render(
+                "index",
+                &IndexTemplateRenderData {
+                    blog_summaries: blog_summaries,
+                },
+            )
+            .unwrap(),
+    )
+    .unwrap();
 
     for blog in blogs {
         let mut data = BTreeMap::new();
         data.insert("content", blog.content);
         data.insert("date", blog.metadata.date.to_string());
         data.insert("title", blog.metadata.title);
-        println!("{}", handlebars.render("blog", &data).unwrap());
+        fs::write(
+            format!("output/blogs/{}.html", blog.metadata.url_friendly_name),
+            handlebars.render("blog", &data).unwrap(),
+        )
+        .unwrap();
     }
 }
 
@@ -75,7 +115,7 @@ fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
         let metadata: BlogMetadata = toml::from_str(blog_divided[1])?;
         blogs.push(Blog {
             content: comrak::markdown_to_html(blog_divided[2], &comrak::ComrakOptions::default()),
-            metadata
+            metadata,
         });
         return Ok(());
     })?;

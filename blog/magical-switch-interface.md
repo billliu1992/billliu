@@ -1,7 +1,7 @@
 ---
 title = "The Magical Switch in your Interface"
 descr = "Some considerations on putting booleans in your interfaces."
-url = "magical-switch-interface"
+url_friendly_name = "magical-switch-interface"
 date = 2020-10-01
 ---
 
