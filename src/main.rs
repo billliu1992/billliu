@@ -38,7 +38,7 @@ struct IndexTemplateRenderData {
 }
 
 fn main() {
-    io::init_dirs(vec!("blogs")).unwrap();
+    io::init_dirs(vec!("blog")).unwrap();
 
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
@@ -52,7 +52,7 @@ fn main() {
             title: blog.metadata.title.clone(),
             descr: blog.metadata.descr.clone(),
             date_rendered: blog.metadata.date.to_string(),
-            href: format!("/blogs/{}", blog.metadata.url_friendly_name),
+            href: format!("/blogs/{}.html", blog.metadata.url_friendly_name),
         });
     }
 
