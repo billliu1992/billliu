@@ -7,7 +7,6 @@ use serde::{Deserialize, Serialize};
 use std::cmp;
 use std::collections::BTreeMap;
 use std::error::Error;
-use std::fs;
 use std::path::Path;
 use toml;
 use toml::value::Datetime;
@@ -39,7 +38,7 @@ struct IndexTemplateRenderData {
 }
 
 fn main() {
-    fs::create_dir_all("output/blogs").unwrap();
+    io::init_dirs(vec!("blogs")).unwrap();
 
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
@@ -57,8 +56,7 @@ fn main() {
         });
     }
 
-    fs::write(
-        "output/index.html",
+    io::write_output_file("index.html",
         handlebars
             .render(
                 "index",
@@ -75,8 +73,8 @@ fn main() {
         data.insert("content", blog.content);
         data.insert("date", blog.metadata.date.to_string());
         data.insert("title", blog.metadata.title);
-        fs::write(
-            format!("output/blogs/{}.html", blog.metadata.url_friendly_name),
+        io::write_output_file(
+            format!("blogs/{}.html", blog.metadata.url_friendly_name),
             handlebars.render("blog", &data).unwrap(),
         )
         .unwrap();
