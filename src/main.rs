@@ -61,6 +61,10 @@ fn main() {
         });
     }
 
+    io::recursively_read_directory("css", &mut |name, content| -> error::EmptyResult {
+        io::write_output_file(format!("{}.css", name), content)
+    }).unwrap();
+
     io::write_output_file("index.html",
         handlebars
             .render(
