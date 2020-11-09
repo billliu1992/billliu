@@ -5,8 +5,8 @@ use crate::error;
 
 const OUTPUT_FOLDER_NAME: &str = "output/";
 
-pub fn recursively_read_directory(
-    root_dir: &Path,
+pub fn recursively_read_directory<P: AsRef<Path>>(
+    root_dir: P,
     handler: &mut dyn FnMut(String, String) -> error::EmptyResult,
 ) -> error::EmptyResult {
     let mut view_dir_files = fs::read_dir(root_dir)?;

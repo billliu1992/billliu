@@ -6,7 +6,6 @@ use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use std::cmp;
 use std::error::Error;
-use std::path::Path;
 use toml;
 use toml::value::Datetime;
 
@@ -89,7 +88,7 @@ fn main() {
 
 fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
     let mut blogs: Vec<Blog> = Vec::new();
-    io::recursively_read_directory(Path::new("./blog"), &mut |name, content| -> error::EmptyResult {
+    io::recursively_read_directory("./blog", &mut |name, content| -> error::EmptyResult {
         let blog_divided: Vec<_> = content.splitn(3, "---").collect();
         if blog_divided.len() < 3 {
             return Err(Box::new(error::SiteError {
@@ -111,7 +110,7 @@ fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
 }
 
 fn read_templates(handlebars: &mut Handlebars) -> error::EmptyResult {
-    io::recursively_read_directory(Path::new("./templates"), &mut |name,
+    io::recursively_read_directory("./templates", &mut |name,
                                                                content|
      -> error::EmptyResult {
         handlebars.register_template_string(&name, content)?;
