@@ -5,7 +5,6 @@ use comrak;
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use std::cmp;
-use std::collections::BTreeMap;
 use std::error::Error;
 use std::path::Path;
 use toml;
@@ -22,6 +21,13 @@ struct BlogMetadata {
     descr: String,
     url_friendly_name: String,
     date: Datetime,
+}
+
+#[derive(Serialize, Deserialize)]
+struct BlogRenderData {
+    content: String,
+    date: String,
+    title: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -69,13 +75,13 @@ fn main() {
     .unwrap();
 
     for blog in blogs {
-        let mut data = BTreeMap::new();
-        data.insert("content", blog.content);
-        data.insert("date", blog.metadata.date.to_string());
-        data.insert("title", blog.metadata.title);
         io::write_output_file(
             format!("blogs/{}.html", blog.metadata.url_friendly_name),
-            handlebars.render("blog", &data).unwrap(),
+            handlebars.render("blog", &BlogRenderData {
+                content: blog.content,
+                date: blog.metadata.date.to_string(),
+                title: blog.metadata.title,
+            }).unwrap(),
         )
         .unwrap();
     }
