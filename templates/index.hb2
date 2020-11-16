@@ -1,32 +1,34 @@
 {{#*inline "title"}} Software Engineer{{/inline}}
 
 {{#*inline "page"}}
-<h1 class="title">Bill Liu</h1>
-<h2 class="subtitle">Software Engineer</h2>
-<nav class="main-nav">
-    <ul>
-        <li>Resume
-        <li>About/Contact
-        <li>LinkedIn
-        <li>Github
-</nav>
-<section class="blog-snippet">
-    <header>Latest Blog Posts</header>
+<div id="homepage">
+    <h1 class="title">Bill Liu</h1>
+    <h2 class="subtitle">Software Engineer</h2>
+    <nav class="main-nav">
+        <ul>
+            <li>Resume
+            <li>About/Contact
+            <li>LinkedIn
+            <li>Github
+    </nav>
+    <section class="blog-snippet">
+        <header>Latest Blog Posts</header>
 
-    {{#each blog_summaries}}
-        <a href="{{href}}" class="blog-post">
-            <h3>{{title}}</h3>
-            -
-            <time>{{date_rendered}}</time>
-            <p>
-                {{descr}}
-            </p>
-            <div class="read-more">
-                Read more...
-            </div>
-        </a>
-    {{/each}}
-</section>
+        {{#each blog_summaries}}
+            <a href="{{href}}" class="blog-summary">
+                <h3>{{title}}</h3>
+                -
+                <time>{{date_rendered}}</time>
+                <p>
+                    {{descr}}
+                </p>
+                <div class="read-more">
+                    Read more...
+                </div>
+            </a>
+        {{/each}}
+    </section>
+</div>
 {{/inline}}
 
 {{~> base}}

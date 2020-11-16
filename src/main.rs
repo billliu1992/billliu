@@ -1,5 +1,5 @@
-mod io;
 mod error;
+mod io;
 
 use comrak;
 use handlebars::Handlebars;
@@ -29,7 +29,7 @@ struct BlogRenderData {
     title: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct BlogSummaryRenderData {
     title: String,
     descr: String,
@@ -42,8 +42,13 @@ struct IndexTemplateRenderData {
     blog_summaries: Vec<BlogSummaryRenderData>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct BlogListRenderData {
+    blog_summaries: Vec<BlogSummaryRenderData>,
+}
+
 fn main() {
-    io::init_dirs(vec!("blog")).unwrap();
+    io::init_dirs(vec!["blog"]).unwrap();
 
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
@@ -52,7 +57,7 @@ fn main() {
     let blogs = read_blogs().unwrap();
 
     let mut blog_summaries: Vec<BlogSummaryRenderData> = Vec::new();
-    for blog in &blogs[0..=cmp::min(4, blog_summaries.len())] {
+    for blog in &blogs {
         blog_summaries.push(BlogSummaryRenderData {
             title: blog.metadata.title.clone(),
             descr: blog.metadata.descr.clone(),
@@ -61,18 +66,36 @@ fn main() {
         });
     }
 
-    let grass_options = grass::Options::default()
-        .style(grass::OutputStyle::Compressed);
+    let grass_options = grass::Options::default().style(grass::OutputStyle::Compressed);
     io::recursively_read_directory("css", &mut |name, content| -> error::EmptyResult {
         io::write_output_file(
             format!("{}.css", name),
-            grass::from_string(content, &grass_options)?)
-    }).unwrap();
+            grass::from_string(content, &grass_options)?,
+        )
+    })
+    .unwrap();
 
-    io::write_output_file("index.html",
+    io::write_output_file(
+        "index.html",
         handlebars
             .render(
                 "index",
+                &IndexTemplateRenderData {
+                    blog_summaries: blog_summaries
+                        .get(0..=cmp::min(4, blog_summaries.len() - 1))
+                        .unwrap()
+                        .to_vec(),
+                },
+            )
+            .unwrap(),
+    )
+    .unwrap();
+
+    io::write_output_file(
+        "blog-list.html",
+        handlebars
+            .render(
+                "blog-list",
                 &IndexTemplateRenderData {
                     blog_summaries: blog_summaries,
                 },
@@ -84,11 +107,16 @@ fn main() {
     for blog in blogs {
         io::write_output_file(
             format!("blogs/{}.html", blog.metadata.url_friendly_name),
-            handlebars.render("blog", &BlogRenderData {
-                content: blog.content,
-                date: blog.metadata.date.to_string(),
-                title: blog.metadata.title,
-            }).unwrap(),
+            handlebars
+                .render(
+                    "blog",
+                    &BlogRenderData {
+                        content: blog.content,
+                        date: blog.metadata.date.to_string(),
+                        title: blog.metadata.title,
+                    },
+                )
+                .unwrap(),
         )
         .unwrap();
     }
@@ -118,9 +146,7 @@ fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
 }
 
 fn read_templates(handlebars: &mut Handlebars) -> error::EmptyResult {
-    io::recursively_read_directory("./templates", &mut |name,
-                                                               content|
-     -> error::EmptyResult {
+    io::recursively_read_directory("./templates", &mut |name, content| -> error::EmptyResult {
         handlebars.register_template_string(&name, content)?;
         Ok(())
     })

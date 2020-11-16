@@ -1,0 +1,18 @@
+{{#*inline "title"}} Blogs{{/inline}}
+
+{{#*inline "page"}}
+{{~> top-nav}}
+
+<h1>Blog Posts:</h1>
+<ul class="blog-list">
+    {{#each blogs}}
+        <li>
+            <span class="title">{{title}}</span>
+            <span class="date">{{date}}</span>
+            <p>{{descr}}</p>
+        </li>
+    {{/each}}
+</ul>
+{{/inline}}
+
+{{~> base}}
