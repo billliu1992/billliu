@@ -61,8 +61,12 @@ fn main() {
         });
     }
 
+    let grass_options = grass::Options::default()
+        .style(grass::OutputStyle::Compressed);
     io::recursively_read_directory("css", &mut |name, content| -> error::EmptyResult {
-        io::write_output_file(format!("{}.css", name), content)
+        io::write_output_file(
+            format!("{}.css", name),
+            grass::from_string(content, &grass_options)?)
     }).unwrap();
 
     io::write_output_file("index.html",
