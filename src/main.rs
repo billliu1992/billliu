@@ -8,6 +8,9 @@ use std::cmp;
 use std::error::Error;
 use toml;
 use toml::value::Datetime;
+use notify::{Watcher, RecursiveMode, watcher};
+use std::sync::mpsc;
+use std::time::{Instant, Duration};
 
 struct Blog {
     metadata: BlogMetadata,
@@ -50,11 +53,28 @@ struct BlogListRenderData {
 fn main() {
     io::init_dirs(vec!["blog"]).unwrap();
 
+    let (tx, rx) = mpsc::channel();
+    let mut watcher = watcher(tx, Duration::from_secs(3)).unwrap();
+    watcher.watch("input/", RecursiveMode::Recursive).unwrap();
+
+    let start_time = Instant::now();
+
+    println!("T + 0s - Listening...");
+    loop {
+        match rx.recv().map(|_| out()) {
+            Ok(_) => println!("T + {}s - Compiled!", start_time.elapsed().as_secs()),
+            Err(e) => println!("Got error: {}", e),
+        }
+    }
+    
+}
+
+fn out() -> error::EmptyResult {
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
-    read_templates(&mut handlebars).unwrap();
+    read_templates(&mut handlebars)?;
 
-    let blogs = read_blogs().unwrap();
+    let blogs = read_blogs()?;
 
     let mut blog_summaries: Vec<BlogSummaryRenderData> = Vec::new();
     for blog in &blogs {
@@ -67,13 +87,12 @@ fn main() {
     }
 
     let grass_options = grass::Options::default().style(grass::OutputStyle::Compressed);
-    io::recursively_read_directory("css", &mut |name, content| -> error::EmptyResult {
+    io::recursively_read_directory("input/css", &mut |name, content| -> error::EmptyResult {
         io::write_output_file(
             format!("{}.css", name),
             grass::from_string(content, &grass_options)?,
         )
-    })
-    .unwrap();
+    })?;
 
     io::write_output_file(
         "index.html",
@@ -83,13 +102,11 @@ fn main() {
                 &IndexTemplateRenderData {
                     blog_summaries: blog_summaries
                         .get(0..=cmp::min(4, blog_summaries.len() - 1))
-                        .unwrap()
+                        .ok_or("No blog summaries")?
                         .to_vec(),
                 },
-            )
-            .unwrap(),
-    )
-    .unwrap();
+            )?,
+    )?;
 
     io::write_output_file(
         "blog-list.html",
@@ -99,10 +116,8 @@ fn main() {
                 &IndexTemplateRenderData {
                     blog_summaries: blog_summaries,
                 },
-            )
-            .unwrap(),
-    )
-    .unwrap();
+            )?,
+    )?;
 
     for blog in blogs {
         io::write_output_file(
@@ -115,16 +130,16 @@ fn main() {
                         date: blog.metadata.date.to_string(),
                         title: blog.metadata.title,
                     },
-                )
-                .unwrap(),
-        )
-        .unwrap();
+                )?,
+        )?;
     }
+
+    Ok(())
 }
 
 fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
     let mut blogs: Vec<Blog> = Vec::new();
-    io::recursively_read_directory("./blog", &mut |name, content| -> error::EmptyResult {
+    io::recursively_read_directory("input/blog", &mut |name, content| -> error::EmptyResult {
         let blog_divided: Vec<_> = content.splitn(3, "---").collect();
         if blog_divided.len() < 3 {
             return Err(Box::new(error::SiteError {
@@ -146,7 +161,7 @@ fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
 }
 
 fn read_templates(handlebars: &mut Handlebars) -> error::EmptyResult {
-    io::recursively_read_directory("./templates", &mut |name, content| -> error::EmptyResult {
+    io::recursively_read_directory("input/templates", &mut |name, content| -> error::EmptyResult {
         handlebars.register_template_string(&name, content)?;
         Ok(())
     })

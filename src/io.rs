@@ -1,9 +1,10 @@
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::error::Error;
 
 use crate::error;
 
-const OUTPUT_FOLDER_NAME: &str = "output/";
+const OUTPUT: &str = "output/";
 
 pub fn recursively_read_directory<P: AsRef<Path>>(
     root_dir: P,
@@ -31,43 +32,41 @@ pub fn recursively_read_directory<P: AsRef<Path>>(
 
 pub fn init_dirs<P: AsRef<Path>>(relative_dirs: Vec<P>) -> error::EmptyResult {
     for relative_dir in relative_dirs {
-        if relative_dir.as_ref().is_absolute() {
-            return Err(Box::new(error::SiteError {
-                msg: format!(
-                    "Initializing directory: {} was not relative",
-                    relative_dir.as_ref().display()
-                ),
-            }));
-        }
-        if !relative_dir.as_ref().is_dir() {
+        let path = create_path(OUTPUT, relative_dir)?;
+
+        if !path.as_ref().is_dir() {
             return Err(Box::new(error::SiteError {
                 msg: format!(
                     "Initializaing directory: {} was not directory",
-                    relative_dir.as_ref().display()
+                    path.as_ref().display()
                 ),
             }));
         }
 
-        let mut new_path = PathBuf::from(OUTPUT_FOLDER_NAME);
-        new_path.push(relative_dir);
-        fs::create_dir_all(new_path)?;
+        fs::create_dir_all(path)?;
     }
     Ok(())
 }
 
 pub fn write_output_file<P: AsRef<Path>>(relative_file: P, content: String) -> error::EmptyResult {
-    if relative_file.as_ref().is_absolute() {
+    let path = create_path(OUTPUT, relative_file)?;
+
+    fs::write(path, content)?;
+    Ok(())
+}
+
+fn create_path<P: AsRef<Path>>(base_path: &str, relative_path: P) -> Result<Box<Path>, Box<dyn Error>> {
+    if relative_path.as_ref().is_absolute() {
         return Err(Box::new(error::SiteError {
             msg: format!(
                 "Input path: {} was not relative",
-                relative_file.as_ref().display()
+                relative_path.as_ref().display()
             ),
         }));
     }
 
-    let mut new_path = PathBuf::from(OUTPUT_FOLDER_NAME);
-    new_path.push(relative_file);
+    let mut new_path = PathBuf::from(base_path);
+    new_path.push(relative_path);
 
-    fs::write(new_path, content)?;
-    Ok(())
+    Ok(new_path.into_boxed_path())
 }

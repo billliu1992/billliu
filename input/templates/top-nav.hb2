@@ -1,5 +1,5 @@
 <nav id="top-nav">
-    <span class="title"><a href="/">Bill Liu</a></span>
+    <a class="title" href="/">Bill Liu</a>
     <ul>
         <li>Resume
         <li>Contact
