@@ -34,10 +34,10 @@ pub fn init_dirs<P: AsRef<Path>>(relative_dirs: Vec<P>) -> error::EmptyResult {
     for relative_dir in relative_dirs {
         let path = create_path(OUTPUT, relative_dir)?;
 
-        if !path.as_ref().is_dir() {
+        if path.as_ref().exists() && !path.as_ref().is_dir() {
             return Err(Box::new(error::SiteError {
                 msg: format!(
-                    "Initializaing directory: {} was not directory",
+                    "Initializaing directory: {} is not a dir",
                     path.as_ref().display()
                 ),
             }));

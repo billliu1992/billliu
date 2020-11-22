@@ -59,6 +59,7 @@ fn main() {
 
     let start_time = Instant::now();
 
+    out().unwrap();
     println!("T + 0s - Listening...");
     loop {
         match rx.recv().map(|_| out()) {
@@ -82,7 +83,7 @@ fn out() -> error::EmptyResult {
             title: blog.metadata.title.clone(),
             descr: blog.metadata.descr.clone(),
             date_rendered: blog.metadata.date.to_string(),
-            href: format!("/blogs/{}.html", blog.metadata.url_friendly_name),
+            href: format!("/blog/{}.html", blog.metadata.url_friendly_name),
         });
     }
 
@@ -121,7 +122,7 @@ fn out() -> error::EmptyResult {
 
     for blog in blogs {
         io::write_output_file(
-            format!("blogs/{}.html", blog.metadata.url_friendly_name),
+            format!("blog/{}.html", blog.metadata.url_friendly_name),
             handlebars
                 .render(
                     "blog",
