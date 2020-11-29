@@ -1,54 +1,11 @@
+mod blog;
 mod error;
 mod io;
+mod template;
 
-use comrak;
-use handlebars::Handlebars;
-use serde::{Deserialize, Serialize};
-use std::cmp;
-use std::error::Error;
-use toml;
-use toml::value::Datetime;
-use notify::{Watcher, RecursiveMode, watcher};
+use notify::{watcher, RecursiveMode, Watcher};
 use std::sync::mpsc;
-use std::time::{Instant, Duration};
-
-struct Blog {
-    metadata: BlogMetadata,
-    content: String,
-}
-
-#[derive(Deserialize)]
-struct BlogMetadata {
-    title: String,
-    descr: String,
-    url_friendly_name: String,
-    date: Datetime,
-}
-
-#[derive(Serialize, Deserialize)]
-struct BlogRenderData {
-    content: String,
-    date: String,
-    title: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct BlogSummaryRenderData {
-    title: String,
-    descr: String,
-    date_rendered: String,
-    href: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct IndexTemplateRenderData {
-    blog_summaries: Vec<BlogSummaryRenderData>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct BlogListRenderData {
-    blog_summaries: Vec<BlogSummaryRenderData>,
-}
+use std::time::{Duration, Instant};
 
 fn main() {
     io::init_dirs(vec!["blog"]).unwrap();
@@ -67,25 +24,16 @@ fn main() {
             Err(e) => println!("Got error: {}", e),
         }
     }
-    
 }
 
 fn out() -> error::EmptyResult {
-    let mut handlebars = Handlebars::new();
-    handlebars.set_strict_mode(true);
-    read_templates(&mut handlebars)?;
+    let mut templates = template::Templates::new();
+    io::recursively_read_directory("input/templates", &mut |name, content| {
+        templates.ingest(&name, &content)
+    })?;
 
-    let blogs = read_blogs()?;
-
-    let mut blog_summaries: Vec<BlogSummaryRenderData> = Vec::new();
-    for blog in &blogs {
-        blog_summaries.push(BlogSummaryRenderData {
-            title: blog.metadata.title.clone(),
-            descr: blog.metadata.descr.clone(),
-            date_rendered: blog.metadata.date.to_string(),
-            href: format!("/blog/{}.html", blog.metadata.url_friendly_name),
-        });
-    }
+    let mut blogs = blog::BlogReader::new();
+    io::recursively_read_directory("input/blog", &mut |_, content| blogs.ingest(content))?;
 
     let grass_options = grass::Options::default().style(grass::OutputStyle::Compressed);
     io::recursively_read_directory("input/css", &mut |name, content| -> error::EmptyResult {
@@ -95,75 +43,19 @@ fn out() -> error::EmptyResult {
         )
     })?;
 
-    io::write_output_file(
-        "index.html",
-        handlebars
-            .render(
-                "index",
-                &IndexTemplateRenderData {
-                    blog_summaries: blog_summaries
-                        .get(0..=cmp::min(4, blog_summaries.len() - 1))
-                        .ok_or("No blog summaries")?
-                        .to_vec(),
-                },
-            )?,
-    )?;
+    io::write_output_file("index.html", templates.render_index(blogs.get_blogs())?)?;
 
     io::write_output_file(
         "blog-list.html",
-        handlebars
-            .render(
-                "blog-list",
-                &IndexTemplateRenderData {
-                    blog_summaries: blog_summaries,
-                },
-            )?,
+        templates.render_blog_list(blogs.get_blogs())?,
     )?;
 
-    for blog in blogs {
+    for blog in blogs.get_blogs() {
         io::write_output_file(
-            format!("blog/{}.html", blog.metadata.url_friendly_name),
-            handlebars
-                .render(
-                    "blog",
-                    &BlogRenderData {
-                        content: blog.content,
-                        date: blog.metadata.date.to_string(),
-                        title: blog.metadata.title,
-                    },
-                )?,
+            format!("blog/{}.html", blog.url_friendly_name),
+            templates.render_blog(blog)?,
         )?;
     }
 
     Ok(())
-}
-
-fn read_blogs() -> Result<Vec<Blog>, Box<dyn Error>> {
-    let mut blogs: Vec<Blog> = Vec::new();
-    io::recursively_read_directory("input/blog", &mut |name, content| -> error::EmptyResult {
-        let blog_divided: Vec<_> = content.splitn(3, "---").collect();
-        if blog_divided.len() < 3 {
-            return Err(Box::new(error::SiteError {
-                msg: format!(
-                    "Blog: {} did not have 4 YAML section divided parts, had: {}",
-                    name,
-                    blog_divided.len()
-                ),
-            }));
-        }
-        let metadata: BlogMetadata = toml::from_str(blog_divided[1])?;
-        blogs.push(Blog {
-            content: comrak::markdown_to_html(blog_divided[2], &comrak::ComrakOptions::default()),
-            metadata,
-        });
-        return Ok(());
-    })?;
-    Ok(blogs)
-}
-
-fn read_templates(handlebars: &mut Handlebars) -> error::EmptyResult {
-    io::recursively_read_directory("input/templates", &mut |name, content| -> error::EmptyResult {
-        handlebars.register_template_string(&name, content)?;
-        Ok(())
-    })
 }
