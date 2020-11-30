@@ -23,10 +23,12 @@
                     {{descr}}
                 </p>
                 <div class="read-more">
-                    Read more...
+                    Read more >
                 </div>
             </a>
         {{/each}}
+
+        <a class="see-all" href="/blog-list.html">See all blogs ></a>
     </section>
 </div>
 {{/inline}}

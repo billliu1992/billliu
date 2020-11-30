@@ -2,9 +2,9 @@
 
 {{#*inline "page"}}
 {{~> top-nav}}
-<article id="blog-post">
+<article id="blog-post" class="page-content">
     <header>
-        <h1>{{title}}</h1>
+        <h1 class="page-title">{{title}}</h1>
         <time>{{date}}</time>
     </header>
     

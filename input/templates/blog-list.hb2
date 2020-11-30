@@ -3,16 +3,24 @@
 {{#*inline "page"}}
 {{~> top-nav}}
 
-<h1>Blog Posts:</h1>
-<ul class="blog-list">
-    {{#each blogs}}
-        <li>
-            <span class="title">{{title}}</span>
-            <span class="date">{{date}}</span>
-            <p>{{descr}}</p>
-        </li>
-    {{/each}}
-</ul>
+<section id="blog-list" class="page-content">
+    <h1 class="page-title">Blog Posts:</h1>
+    <ul class="blog-list">
+        {{#each blog_summaries}}
+            <li>
+                <a href="{{href}}">
+                    <h3 class="title">{{title}}</h3>
+                    -
+                    <time>{{date_rendered}}</time>
+                    <p>{{descr}}</p>
+                    <div class="read-more">
+                        Read more >
+                    </div>
+                </a>
+            </li>
+        {{/each}}
+    </ul>
+</section>
 {{/inline}}
 
 {{~> base}}
