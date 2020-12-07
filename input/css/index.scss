@@ -5,8 +5,13 @@ body {
 }
 
 a {
-	text-decoration: none;
 	color: black;
+	text-decoration: none;
+}
+
+p a {
+	color: #555;
+	text-decoration: underline;
 }
 
 ul {
@@ -151,5 +156,31 @@ ul {
 
 	p {
 		margin: .5rem 0;
+	}
+}
+
+#about-me {
+	align-items: center;
+	display: flex;
+	padding: 3rem 0 0;
+
+	aside {
+		width: 15rem;
+	}
+	article {
+		padding: 0 3rem;
+	}
+	p {
+		margin: 0 0 1rem;
+	}
+	.portrait {
+		display: block;
+		margin: 0 auto;
+		width: 10rem;
+	}
+	.portrait-label {
+		font-size: .8rem;
+		padding: .3rem;
+		text-align: center;
 	}
 }
