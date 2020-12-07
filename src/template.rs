@@ -13,6 +13,13 @@ impl Templates<'_> {
     pub fn new<'a>() -> Templates<'a> {
         let mut handlebars = Handlebars::new();
         handlebars.set_strict_mode(true);
+
+        handlebars.register_template_string("link-about", "/about.html").unwrap();
+        handlebars.register_template_string("link-resume", "/static/resume.pdf").unwrap();
+        handlebars.register_template_string("link-blog", "/blog-list.html").unwrap();
+        handlebars.register_template_string("link-linkedin", "https://www.linkedin.com/in/billliu1992/").unwrap();
+        handlebars.register_template_string("link-github", "https://github.com/billliu1992").unwrap();
+
         Templates { handlebars }
     }
 
@@ -53,6 +60,10 @@ impl Templates<'_> {
                     title: &blog.title,
                 },
             )?)
+    }
+
+    pub fn render_about(&self) -> Result<String, Box<dyn Error>> {
+        Ok(self.handlebars.render("about", &true)?)
     }
 
     fn blogs_to_summary_render_datas(blogs: &[Blog]) -> Vec<BlogSummaryRenderData> {

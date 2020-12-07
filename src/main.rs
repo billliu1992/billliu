@@ -8,7 +8,7 @@ use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
 fn main() {
-    io::init_dirs(vec!["blog"]).unwrap();
+    io::init_dirs(vec!["blog", "static"]).unwrap();
 
     let (tx, rx) = mpsc::channel();
     let mut watcher = watcher(tx, Duration::from_secs(3)).unwrap();
@@ -28,15 +28,15 @@ fn main() {
 
 fn out() -> error::EmptyResult {
     let mut templates = template::Templates::new();
-    io::recursively_read_directory("input/templates", &mut |name, content| {
+    io::read_dir("templates", &mut |name, content| {
         templates.ingest(&name, &content)
     })?;
 
     let mut blogs = blog::BlogReader::new();
-    io::recursively_read_directory("input/blog", &mut |_, content| blogs.ingest(content))?;
+    io::read_dir("blog", &mut |_, content| blogs.ingest(content))?;
 
     let grass_options = grass::Options::default().style(grass::OutputStyle::Compressed);
-    io::recursively_read_directory("input/css", &mut |name, content| -> error::EmptyResult {
+    io::read_dir("css", &mut |name, content| -> error::EmptyResult {
         io::write_output_file(
             format!("{}.css", name),
             grass::from_string(content, &grass_options)?,
@@ -50,12 +50,20 @@ fn out() -> error::EmptyResult {
         templates.render_blog_list(blogs.get_blogs())?,
     )?;
 
+    io::write_output_file(
+        "about.html",
+        templates.render_about()?,
+    )?;
+
     for blog in blogs.get_blogs() {
         io::write_output_file(
             format!("blog/{}.html", blog.url_friendly_name),
             templates.render_blog(blog)?,
         )?;
     }
+
+    io::copy_to_output("static/me.jpg")?;
+    io::copy_to_output("static/resume.pdf")?;
 
     Ok(())
 }

@@ -6,10 +6,11 @@
     <h2 class="subtitle">Software Engineer</h2>
     <nav class="main-nav">
         <ul>
-            <li>Resume
-            <li>About/Contact
-            <li>LinkedIn
-            <li>Github
+            <li><a href="{{~> link-about}}">About/Contact</a>
+            <li><a href="{{~> link-resume}}" target="_blank">Resume</a>
+            <li><a href="{{~> link-blog}}">Blog</a>
+            <li><a href="{{~> link-linkedin}}" target="_blank">LinkedIn</a>
+            <li><a href="{{~> link-github}}" target="_blank">Github</a>
     </nav>
     <section class="blog-snippet">
         <header>Latest Blog Posts</header>
