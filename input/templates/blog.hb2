@@ -7,8 +7,9 @@
         <h1 class="page-title">{{title}}</h1>
         <time>{{date}}</time>
     </header>
-    
-    {{{content}}}
+    <div class="blog-body">
+        {{{content}}}
+    </div>
 </article>
 {{/inline}}
 
