@@ -1,32 +1,53 @@
 {{#*inline "title"}} Software Engineer{{/inline}}
 
 {{#*inline "page"}}
+{{~> top-nav}}
 <div id="homepage">
-    <h1 class="title">Bill Liu</h1>
-    <h2 class="subtitle">Software Engineer</h2>
-    <nav class="main-nav">
-        <ul>
-            <li><a href="{{~> link-about}}">About/Contact</a>
-            <li><a href="{{~> link-resume}}" target="_blank">Resume</a>
-            <li><a href="{{~> link-blog}}">Blog</a>
-            <li><a href="{{~> link-linkedin}}" target="_blank">LinkedIn</a>
-            <li><a href="{{~> link-github}}" target="_blank">Github</a>
-    </nav>
+    <section class="introduction">
+        <img class="portrait" src="/static/me.jpg">
+        <article>
+            <h1>Hey, I'm Bill Liu</h1>
+            <p>
+                I'm a full-stack Software Engineer with 5 years of experience based in
+                San Francisco.
+            </p>
+            <p>
+                I have experience working across the stack, from backend services with
+                database queries to HTML, CSS, to Javascript on a customer facing product.
+                Interested in everything that makes things happen, from release engineering
+                to mentoring others.
+            </p>
+            <p>
+                Take a look at my <a href="{{~> link-resume}}" target="_blank">Resume</a> or
+                contact me at <a id="js-email">[Enable Javascript to see.]</a>
+            </p>
+
+            <script>
+                let text = 'liu_bill';
+                text += '@';
+                text += 'live.com';
+                let el = document.querySelector('#js-email');
+                el.innerHTML = text;
+                el.setAttribute('href', 'mailto:' + text);
+            </script>
+        </article>
+    </section>
+
     <section class="blog-snippet">
         <header>Latest Blog Posts</header>
 
         {{#each blog_summaries}}
-            <a href="{{href}}" class="blog-summary">
-                <h3>{{title}}</h3>
-                -
-                <time>{{date_rendered}}</time>
-                <p>
-                    {{descr}}
-                </p>
-                <div class="read-more">
-                    Read more >
-                </div>
-            </a>
+        <a href="{{href}}" class="blog-summary">
+            <h3>{{title}}</h3>
+            -
+            <time>{{date_rendered}}</time>
+            <p>
+                {{descr}}
+            </p>
+            <div class="read-more">
+                Read more >
+            </div>
+        </a>
         {{/each}}
 
         <a class="see-all" href="/blog-list.html">See all blogs ></a>

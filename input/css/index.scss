@@ -37,44 +37,28 @@ ul {
 }
 
 #homepage {
-	.title {
-		box-sizing: border-box;
-		font-size: 6rem;
-		line-height: 1;
-		margin: 30vh 0 0 0;
-		padding: 0;
-		text-align:center;
-		width: 100%;
-	}
+	.introduction {
+		align-items: flex-start;
+		display: flex;
+		justify-content: space-between;
+		margin: 5rem auto;
+		max-width: 50rem;
+		padding: 0 1rem;
 
-	.subtitle {
-		box-sizing: border-box;
-		font-size: 2rem;
-		line-height: 1;
-		margin: 0;
-		padding: 0;
-		text-align:center;
-		width: 100%;
-	}
+		.portrait {
+			display: inline-block;
+			width: 10rem;
+			flex: 0 0;
+		}
 
-	.main-nav {
-		text-align: center;
-		width: 100%;
-	}
+		h1 {
+			margin: 0;
+		}
 
-	.main-nav ul {
-		border-top: 1px solid #000;
-		display: inline-block;
-		margin: .5rem 0 0 0;	
-		padding: .5rem 0 0 0;
-		list-style: none;
-	}
-
-	.main-nav li {
-		display: inline-block;
-		font-size: 1.3rem;
-		margin: 0 1rem;
-		text-transform: uppercase;
+		article {
+			display: inline-block;
+			padding: 0 3rem;
+		}
 	}
 
 	.blog-snippet {
@@ -162,31 +146,5 @@ ul {
 
 	p {
 		margin: .5rem 0;
-	}
-}
-
-#about-me {
-	align-items: center;
-	display: flex;
-	padding: 3rem 0 0;
-
-	aside {
-		width: 15rem;
-	}
-	article {
-		padding: 0 3rem;
-	}
-	p {
-		margin: 0 0 1rem;
-	}
-	.portrait {
-		display: block;
-		margin: 0 auto;
-		width: 10rem;
-	}
-	.portrait-label {
-		font-size: .8rem;
-		padding: .3rem;
-		text-align: center;
 	}
 }

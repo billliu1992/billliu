@@ -50,11 +50,6 @@ fn out() -> error::EmptyResult {
         templates.render_blog_list(blogs.get_blogs())?,
     )?;
 
-    io::write_output_file(
-        "about.html",
-        templates.render_about()?,
-    )?;
-
     for blog in blogs.get_blogs() {
         io::write_output_file(
             format!("blog/{}.html", blog.url_friendly_name),
