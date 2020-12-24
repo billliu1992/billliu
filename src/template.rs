@@ -62,10 +62,6 @@ impl Templates<'_> {
             )?)
     }
 
-    pub fn render_about(&self) -> Result<String, Box<dyn Error>> {
-        Ok(self.handlebars.render("about", &true)?)
-    }
-
     fn blogs_to_summary_render_datas(blogs: &[Blog]) -> Vec<BlogSummaryRenderData> {
         let mut blog_summaries: Vec<BlogSummaryRenderData> = Vec::new();
         for blog in blogs {
