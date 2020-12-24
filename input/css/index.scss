@@ -40,7 +40,8 @@ ul {
 	.introduction {
 		align-items: flex-start;
 		display: flex;
-		justify-content: space-between;
+		flex-wrap: wrap-reverse;
+		justify-content: space-around;
 		margin: 5rem auto;
 		max-width: 50rem;
 		padding: 0 1rem;
@@ -52,21 +53,22 @@ ul {
 		}
 
 		h1 {
+			font-size: 2rem;
 			margin: 0;
 		}
 
 		article {
 			display: inline-block;
-			padding: 0 3rem;
+			max-width: 30rem;
+			padding: 0 1rem;
 		}
 	}
 
 	.blog-snippet {
 		border-radius: 5px;
 		margin: 5rem auto 0;
-		width: 70vw;
-	}
-	@media (min-width:481px)  { 
+		max-width: 50rem;
+		padding: 0 1rem;
 	}
 
 	.blog-snippet header {
@@ -120,6 +122,30 @@ ul {
 	}
 }
 
+#mobile-nav {
+	display: none;
+	border-top: 1px solid black;
+	margin: 1rem 1rem 0;
+	padding: 1rem;
+
+	a {
+		display: block;
+		padding: .3rem 0;
+		text-align: center;
+	}
+}
+
+@media (max-width:481px) {
+	#top-nav {
+		ul {
+			display: none;
+		}
+	}
+	#mobile-nav {
+		display: block;
+	}
+}
+
 #blog-post {
 	header {
 		text-align: center;
@@ -130,6 +156,7 @@ ul {
 	}
 
 	pre {
+		overflow: scroll;
 		padding: 0 1rem;
 	}
 }

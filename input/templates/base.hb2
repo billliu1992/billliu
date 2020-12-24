@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/index.css">
 <title>Bill Liu - {{~> title}}</title>
 
+<nav id="top-nav">
+    <a class="title" href="/">Bill Liu</a>
+    <ul>
+        <li><a href="{{~> link-resume}}" target="_blank">Resume</a>
+        <li><a href="{{~> link-blog}}">Blog</a>
+        <li><a href="{{~> link-linkedin}}" target="_blank">LinkedIn</a>
+        <li><a href="{{~> link-github}}" target="_blank">Github</a>
+</nav>
 {{~> page}}
+<nav id="mobile-nav">
+    <ul>
+        <li><a href="/">About Bill</a>
+        <li><a href="{{~> link-resume}}" target="_blank">Resume</a>
+        <li><a href="{{~> link-blog}}">Blog</a>
+        <li><a href="{{~> link-linkedin}}" target="_blank">LinkedIn</a>
+        <li><a href="{{~> link-github}}" target="_blank">Github</a>
+</nav>

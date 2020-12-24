@@ -1,7 +1,6 @@
 {{#*inline "title"}} {{title}}{{/inline}}
 
 {{#*inline "page"}}
-{{~> top-nav}}
 <article id="blog-post" class="page-content">
     <header>
         <h1 class="page-title">{{title}}</h1>

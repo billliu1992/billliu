@@ -1,7 +1,6 @@
 {{#*inline "title"}} Software Engineer{{/inline}}
 
 {{#*inline "page"}}
-{{~> top-nav}}
 <div id="homepage">
     <section class="introduction">
         <img class="portrait" src="/static/me.jpg">

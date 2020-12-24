@@ -1,8 +1,6 @@
 {{#*inline "title"}} Blogs{{/inline}}
 
 {{#*inline "page"}}
-{{~> top-nav}}
-
 <section id="blog-list" class="page-content">
     <h1 class="page-title">Blog Posts:</h1>
     <ul class="blog-list">
