@@ -1,3 +1,5 @@
+$mobile-cutoff: 481px;
+
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0;
@@ -116,33 +118,40 @@ ul {
 		text-decoration: none;
 	}
 
+	ul {
+		@media (max-width:$mobile-cutoff) {
+			display: none;
+		}
+	}
+
 	li {
 		display: inline-block;
 		padding: 0 .5rem;
 	}
+
+	.to-mobile-nav {
+		display: none;
+
+		@media (max-width:$mobile-cutoff) {
+			display: block;
+		}
+	}
 }
 
 #mobile-nav {
-	display: none;
 	border-top: 1px solid black;
+	display: none;
 	margin: 1rem 1rem 0;
 	padding: 1rem;
+
+	@media (max-width:$mobile-cutoff) {
+		display: block;
+	}
 
 	a {
 		display: block;
 		padding: .3rem 0;
 		text-align: center;
-	}
-}
-
-@media (max-width:481px) {
-	#top-nav {
-		ul {
-			display: none;
-		}
-	}
-	#mobile-nav {
-		display: block;
 	}
 }
 
