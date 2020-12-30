@@ -6,8 +6,8 @@
     <ul class="blog-list">
         {{#each blog_summaries}}
             <li>
-                <a href="{{href}}">
-                    <h3 class="title">{{title}}</h3>
+                <a href="{{href}}" class="blog-entry">
+                    <h3>{{title}}</h3>
                     -
                     <time>{{date_rendered}}</time>
                     <p>{{descr}}</p>
