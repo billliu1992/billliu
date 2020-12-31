@@ -18,8 +18,7 @@
             </p>
             <p>
                 Take a look at my <a href="{{~> link-resume}}" target="_blank">resume</a>,
-                <a data-set-email-href>e-mail</a>
-                me at <a id="js-email">[Enable Javascript to see]</a>, or find me on
+                <a data-set-email-href>e-mail</a> me, or find me on
                 <a href="{{~> link-twitter}}" target="_blank">Twitter</a>.
             </p>
         </article>
