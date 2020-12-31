@@ -8,6 +8,12 @@
     </header>
     <div class="blog-body">
         {{{content}}}
+
+        <p>
+            - Bill Liu,
+            <a data-set-email-href>email</a>,
+            <a href="{{~> link-twitter}}" target="_blank">Twitter</a>
+        </p>
     </div>
 </article>
 {{/inline}}

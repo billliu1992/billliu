@@ -31,3 +31,13 @@
         <li><a href="{{~> link-linkedin}}" target="_blank">LinkedIn</a>
         <li><a href="{{~> link-github}}" target="_blank">Github</a>
 </nav>
+
+<script>
+    let text = 'liu_bill';
+    text += '@';
+    text += 'live.com';
+    let els = document.querySelectorAll('[data-set-email-href]');
+    for (let el of els) {
+        el.setAttribute('href', 'mailto:' + text);
+    }
+</script>

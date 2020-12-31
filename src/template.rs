@@ -19,6 +19,7 @@ impl Templates<'_> {
         handlebars.register_template_string("link-blog", "/blog-list.html").unwrap();
         handlebars.register_template_string("link-linkedin", "https://www.linkedin.com/in/billliu1992/").unwrap();
         handlebars.register_template_string("link-github", "https://github.com/billliu1992").unwrap();
+        handlebars.register_template_string("link-twitter", "https://twitter.com/bill_liu_il/").unwrap();
 
         Templates { handlebars }
     }
