@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="{{~> description}}">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4DYBL6D1X"></script>
 <script>
     window.dataLayer = window.dataLayer || [];

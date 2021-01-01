@@ -1,5 +1,7 @@
 {{#*inline "title"}} {{title}}{{/inline}}
 
+{{#*inline "description"}}{{descr}}{{/inline}}
+
 {{#*inline "page"}}
 <article id="blog-post" class="page-content">
     <header>

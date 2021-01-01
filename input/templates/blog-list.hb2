@@ -1,5 +1,7 @@
 {{#*inline "title"}} Blogs{{/inline}}
 
+{{#*inline "description"}}Software engineering and other topics by Bill Liu.{{/inline}}
+
 {{#*inline "page"}}
 <section id="blog-list" class="page-content">
     <h1 class="page-title">Blog Posts:</h1>

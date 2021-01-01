@@ -1,5 +1,7 @@
 {{#*inline "title"}} Software Engineer{{/inline}}
 
+{{#*inline "description"}}The site and blog of Bill Liu, a software engineer with 5 years of experience based in San Francisco.{{/inline}}
+
 {{#*inline "page"}}
 <div id="homepage">
     <section class="introduction">

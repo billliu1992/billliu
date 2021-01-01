@@ -58,6 +58,7 @@ impl Templates<'_> {
                 &BlogRenderData {
                     content: &blog.content,
                     date: &blog.date.to_string(),
+                    descr: &blog.descr,
                     title: &blog.title,
                 },
             )?)
@@ -80,6 +81,7 @@ impl Templates<'_> {
 #[derive(Serialize, Deserialize)]
 struct BlogRenderData<'a> {
     content: &'a str,
+    descr: &'a str,
     date: &'a str,
     title: &'a str,
 }
