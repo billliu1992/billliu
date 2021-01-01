@@ -1,5 +1,5 @@
 ---
-title = "Applying Software Engineering Principles to CSS"
+title = "Applying Software Engineering Principles to maintaining CSS"
 descr = "Making maintenance of CSS a bit more bearable by applying software engineering principles."
 url_friendly_name = "software-engineering-principles-css"
 date = 2020-11-28
@@ -8,7 +8,9 @@ date = 2020-11-28
 CSS is the ugly step-child of front-end web development. The amount of jokes
 and [memes][reddit] about how hard it can be are endless. Just vertically centering things require [instructions][instructions]. Given its difficulty, one may think working with CSS is just difficult by default. Can we apply some software engineering principles to make our lives maintaining CSS better?
 
-## Tip: Make your HTML/CSS communicate your intentions
+I wanted to put these thoughts into words because I meet a lot of good developers who treat maintaining CSS an afterthought. Because CSS is so unwieldy, and it "just" styles the HTML, a lot of developers understandably do not want to deal with it. This results in bloated style sheets that are hard to work with. Here, I outline some principles that will hopefully convince someone that thoughtful maintenance of CSS is possible and worthwhile.
+
+## Make your HTML/CSS communicate your intentions
 
 Making even a small change to the code can be hard if you have no idea what the
 code is doing. Even worse, if you don't understand the code you're changing,
@@ -59,11 +61,11 @@ This information is also very helpful to a future maintainer. Having clear inten
 
 The thing about communication is that it's highly dependent upon the parties communicating: what may be clear to one may not be clear to others. It may help to be open to feedback when something that is clear to you isn't clear to another maintainer. It may also be helpful to identify opportunities to teach others, so that what's clear to you becomes clear to others.
 
-## Tip: Keep your HTML/CSS concise.
+## Keep your HTML/CSS concise
 
 Have you ever heard a long and rambling story? Long stories aren't by default bad, but a lot of non-constructive additions can make the point hard to keep track of. Like a bad story, HTML/CSS that is unnecessarily large can be hard to wrangle.
 
-One way CSS can become unnecessarily large is if there are a lot of unused rules. Digging through a lot of rules is hard, and unused rules just adds to the overhead. We briefly mentioned a solution in the previous tip, but you can also consider static analysis.
+One way CSS can become unnecessarily large is if there are a lot of unused rules. Digging through a lot of rules is hard, and unused rules just adds to the overhead. We briefly mentioned a solution in the previous section, but you can also consider static analysis.
 
 Another way CSS can become unnecessarily large is if we have a lot of wrapper elements. Let's take an extreme example:
 
@@ -107,7 +109,7 @@ Another way CSS can become unnecessarily large is if we have a lot of wrapper el
 
 Figuring out when a child is inheriting a parent rule can be hard, but it can be easier if you don't have a lot of wrapper elements. The more wrapper elements you have, the more places you need to watch out for an inherited rule.
 
-## Tip: Keep future changes in mind
+## Keep future changes in mind
 
 CSS by design allows ancestor elements to affect the style of child elements.
 Sometimes, a rule on an ancestor can make it a lot harder to change a child
@@ -123,7 +125,7 @@ Example of things that can be frustrating to workaround:
 
 None of the above examples are necessarily bad practices. However, under certain circumstances, they can cause future changes to be harder. Because of this, it may make sense to try to avoid them if possible.
 
-One of my recent reads is [The Pragmatic Programmer][prag], which says well designed software is *easier to change*. I really liked the reasons they gave in the book, and would highly recommend it to other software engineers.
+One of my recent reads is [The Pragmatic Programmer][prag], which says well designed software is *easier to change*. Most maintenance work can be boiled down to changing code, so if your code is hard to change, your work is going to take longer and be more error prone. This applies to CSS as well.
 
 Software engineering principles are general, and there can be a lot of discussion on how best to implement them. How do you apply software engineering principles to CSS? How do you keep your CSS maintainable? Let me know what you think.
 
