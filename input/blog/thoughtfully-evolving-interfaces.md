@@ -1,6 +1,6 @@
 ---
 title = "Thoughtfully Evolving Interfaces"
-descr = "Some things to think about when adding functionality to an existing codebase?"
+descr = "Some things to think about when adding functionality to an existing codebase."
 url_friendly_name = "thoughtfully-evolving-interfaces"
 date = 2020-10-01
 ---
