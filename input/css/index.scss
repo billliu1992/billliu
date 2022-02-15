@@ -29,7 +29,7 @@ p a {
 
 #homepage {
 	.introduction {
-		align-items: flex-start;
+		align-items: center;
 		display: flex;
 		flex-wrap: wrap-reverse;
 		justify-content: space-around;
@@ -38,8 +38,9 @@ p a {
 		padding: 0 1rem;
 
 		.portrait {
+			border-radius: 6rem;
 			display: inline-block;
-			width: 10rem;
+			width: 12rem;
 			flex: 0 0;
 		}
 
